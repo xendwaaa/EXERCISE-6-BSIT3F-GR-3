@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Validation using AJAX</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #682c68;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        section {
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 600px;
+            flex-grow: 1;
+        }
+
+        form {
+            background-color: #f3a6fa;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+        }
+
+        textarea {
+            width: calc(100% - 40px);
+            padding: 10px;
+            margin: 10px 20px;
+            border: 1px solid #d1c4e9;
+            border-radius: 4px;
+            font-size: 14px;
+            background-color: #f3e5f5;
+            box-sizing: border-box;
+            height: 150px;
+            resize: none;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #ffffff;
+            text-align: center;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+            color: #4a148c;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        select,
+        textarea {
+            width: calc(100% - 40px);
+            padding: 10px;
+            margin: 10px 20px;
+            border: 1px solid #d1c4e9;
+            border-radius: 4px;
+            font-size: 14px;
+            background-color: #f3e5f5;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #7e57c2;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #673ab7;
+        }
+
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+
+        .success {
+            color: green;
+            margin-top: 10px;
+        }
+
+        #responseMessage {
+            margin-top: 20px;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<section id="contactSection">
+    <h2>Contact Form</h2>
+
+    <form id="contactForm">
+        <label for="firstname">First Name:</label>
+        <input type="text" id="firstname" name="firstname" placeholder="Enter your first name" required>
+
+        <label for="middlename">Middle Name (Optional):</label>
+        <input type="text" id="middlename" name="middlename" placeholder="Enter your middle name">
+
+        <label for="lastname">Last Name:</label>
+        <input type="text" id="lastname" name="lastname" placeholder="Enter your last name" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+        <label for="gender">Gender:</label>
+        <select id="gender" name="gender" required>
+            <option value="">Select Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+        </select>
+
+        <label for="message">Message:</label>
+        <textarea id="message" name="message" placeholder="Write your message here" required></textarea>
+
+        <button type="button" onclick="submitForm()">Submit</button>
+    </form>
+
+    <div id="responseMessage"></div>
+</section>
+
+<script>
+    function resetForm() {
+        const responseMessageElement = document.getElementById("responseMessage");
+        responseMessageElement.innerHTML = '';
+        document.getElementById("contactForm").reset();
+    }
+
+    window.onload = resetForm;
+    window.addEventListener('pageshow', function(event) {
+        if (event.persisted) {
+            resetForm();
+        }
+    });
+
+    function submitForm() {
+        const firstname = document.getElementById("firstname").value;
+        const middlename = document.getElementById("middlename").value;
+        const lastname = document.getElementById("lastname").value;
+        const email = document.getElementById("email").value;
+        const gender = document.getElementById("gender").value;
+        const message = document.getElementById("message").value;
+
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "redirect.php", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                const response = JSON.parse(xhr.responseText);
+                const responseMessageElement = document.getElementById("responseMessage");
+
+                if (response.status === 'error') {
+                    responseMessageElement.innerHTML = '<div class="error">' + response.messages.join('<br>') + '</div>';
+                } else if (response.status === 'success') {
+                    window.location.href = "thanks.html?firstname=" + encodeURIComponent(firstname) +
+                        "&middlename=" + encodeURIComponent(middlename) +
+                        "&lastname=" + encodeURIComponent(lastname) +
+                        "&email=" + encodeURIComponent(email) +
+                        "&gender=" + encodeURIComponent(gender) +
+                        "&message=" + encodeURIComponent(message);
+                }
+                history.replaceState(null, null, window.location.href);
+            }
+        };
+
+        const params = `firstname=${encodeURIComponent(firstname)}&middlename=${encodeURIComponent(middlename)}&lastname=${encodeURIComponent(lastname)}&email=${encodeURIComponent(email)}&gender=${encodeURIComponent(gender)}&message=${encodeURIComponent(message)}`;
+        xhr.send(params);
+    }
+</script>
+
+</body>
+</html>

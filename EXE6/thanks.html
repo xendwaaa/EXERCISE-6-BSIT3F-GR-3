@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #682c68;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        h2 {
+            color: #ffffff;
+            text-align: center;
+        }
+
+        form {
+            background-color: #f3a6fa;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            margin-top: 20px;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+            color: #4a148c;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        select,
+        textarea {
+            width: calc(100% - 40px);
+            padding: 10px;
+            margin: 10px 20px;
+            border: 1px solid #d1c4e9;
+            border-radius: 4px;
+            font-size: 14px;
+            background-color: #f3e5f5;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #7e57c2;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #673ab7;
+        }
+
+        .back-button {
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #4a148c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .back-button:hover {
+            background-color: #371c5e;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Thank you <span id="displayFirstnameHeader"></span> for responding!</h2>
+
+    <form id="submittedDataForm">
+        <p><strong>First Name:</strong> <span id="displayFirstname"></span></p>
+        <p><strong>Middle Name:</strong> <span id="displayMiddlename"></span></p>
+        <p><strong>Last Name:</strong> <span id="displayLastname"></span></p>
+        <p><strong>Email:</strong> <span id="displayEmail"></span></p>
+        <p><strong>Gender:</strong> <span id="displayGender"></span></p>
+        <p><strong>Message:</strong> <span id="displayMessage"></span></p>
+        
+        <button type="button" class="back-button" onclick="goBack()">Back</button>
+    </form>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const firstname = urlParams.get("firstname");
+        const middlename = urlParams.get("middlename");
+        const lastname = urlParams.get("lastname");
+        const email = urlParams.get("email");
+        const gender = urlParams.get("gender");
+        const message = urlParams.get("message");
+
+        document.getElementById("displayFirstname").textContent = firstname;
+        document.getElementById("displayFirstnameHeader").textContent = firstname;
+        document.getElementById("displayMiddlename").textContent = middlename;
+        document.getElementById("displayLastname").textContent = lastname;
+        document.getElementById("displayEmail").textContent = email;
+        document.getElementById("displayGender").textContent = gender;
+        document.getElementById("displayMessage").textContent = message;
+
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+
+</body>
+</html>
